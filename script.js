@@ -8,8 +8,8 @@ const PlayerFactory = (name, marker) => {
 const player1 = PlayerFactory("Pobi", "X");
 const player2 = PlayerFactory("Polo", "O");
 
-const gameBoard = (() => {//BOARD MODULE
-
+//BOARD MODULE
+const gameBoard = (() => {
   const createBoard = () => {
     let grid = [];
     for (let i = 0; i < 3; i++) {
@@ -27,8 +27,8 @@ const gameBoard = (() => {//BOARD MODULE
   return { board };
 })();
 
-const gameFlow = (() => {// GAME FLOW MODULE
-
+// GAME FLOW MODULE
+const gameFlow = (() => {
   let currentPlayer = player1;
 
   const makePlay = (cellRow, cellColumn, player) => {
@@ -47,60 +47,59 @@ const gameFlow = (() => {// GAME FLOW MODULE
   //BY ROWS
   const rowArr = () => {
     const arrString = [];
-    gameBoard.board.forEach(row => {
+    gameBoard.board.forEach((row) => {
       let joined = row.join("");
       arrString.push(joined);
     });
     return arrString;
   };
 
-  
   //BY COLUMNS
   const columnArr = () => {
-    const columnString = ['','',''];
-    gameBoard.board.forEach(row => {
+    const columnString = ["", "", ""];
+    gameBoard.board.forEach((row) => {
       for (let i = 0; i < 3; i++) {
         columnString[i] += row[i];
       }
     });
     return columnString;
-  }
+  };
 
-  //BY DIAGONAL 
-  const diagonalArr = () => { 
-    const diagonalString = ['',''];
+  //BY DIAGONAL
+  const diagonalArr = () => {
+    const diagonalString = ["", ""];
     for (let i = 0; i < 3; i++) {
       switch (i) {
         case 0:
           diagonalString[0] += gameBoard.board[i][0];
           diagonalString[1] += gameBoard.board[i][2];
-        break;
+          break;
         case 1:
           diagonalString[0] += gameBoard.board[i][1];
           diagonalString[1] += gameBoard.board[i][1];
-        break;
+          break;
         case 2:
           diagonalString[0] += gameBoard.board[i][2];
           diagonalString[1] += gameBoard.board[i][0];
-        break; 
+          break;
       }
     }
     return diagonalString;
-  }
-  
+  };
+
   const checker = (arrMarkers) => {
     let marker = `${currentPlayer.marker}`;
     let pattern = `${marker}${marker}${marker}`;
     const arrString = arrMarkers;
     console.log(arrString);
-    
+
     arrMarkers.forEach((string) => {
       if (string === pattern) {
         console.log(`${marker} Winner`);
       }
     });
   };
-  
+
   const checkWinner = () => {
     const row = rowArr();
     checker(row);
@@ -110,12 +109,18 @@ const gameFlow = (() => {// GAME FLOW MODULE
     checker(diagonal);
   };
 
-  makePlay(0, 0);//X
-  makePlay(0, 2);//O
-  makePlay(2, 2);//X
-  makePlay(2, 1);//O
-  makePlay(1, 1);//X
+  makePlay(0, 0); //X
+  makePlay(0, 2); //O
+  makePlay(2, 2); //X
+  makePlay(2, 1); //O
+  makePlay(1, 1); //X
   console.table(gameBoard.board);
+
+  return { makePlay };
 })();
 
-const display = (() => {})();
+// DISPLAY GAME MODULE
+const display = (() => {
+  const cell = document.querySelectorAll('cell');
+
+})();
