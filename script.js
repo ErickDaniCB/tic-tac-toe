@@ -8,8 +8,7 @@ const PlayerFactory = (name, marker) => {
 const player1 = PlayerFactory("Pobi", "X");
 const player2 = PlayerFactory("Polo", "O");
 
-const gameBoard = (() => {
-  //BOARD MODULE
+const gameBoard = (() => {//BOARD MODULE
 
   const createBoard = () => {
     let grid = [];
@@ -28,8 +27,7 @@ const gameBoard = (() => {
   return { board };
 })();
 
-const gameFlow = (() => {
-  // GAME FLOW MODULE
+const gameFlow = (() => {// GAME FLOW MODULE
 
   let currentPlayer = player1;
 
@@ -47,40 +45,52 @@ const gameFlow = (() => {
   // WIN CONDITIONS: //
 
   //BY ROWS
-  const rowStrings = () => {
-    let arrString = [];
-    gameBoard.board.forEach((row) => {
+  const rowArr = () => {
+    const arrString = [];
+    gameBoard.board.forEach(row => {
       let joined = row.join("");
       arrString.push(joined);
     });
     return arrString;
   };
 
-  const rowChecker = () => {
+  
+  //BY COLUMNS
+  const columnArr = () => {
+    const columnString = ['','',''];
+    gameBoard.board.forEach(row => {
+      for (let i = 0; i < 3; i++) {
+        columnString[i] += row[i];
+      }
+    });
+    return columnString;
+  }
+  
+  const checker = (arrMarkers) => {
     let marker = `${currentPlayer.marker}`;
     let pattern = `${marker}${marker}${marker}`;
-    const arrString = rowStrings();
+    const arrString = arrMarkers;
     console.log(arrString);
-
-    arrString.forEach((string) => {
+    
+    arrMarkers.forEach((string) => {
       if (string === pattern) {
-        console.log(`${marker} Winner by row!`);
+        console.log(`${marker} Winner`);
       }
     });
   };
-
-  //BY COLUMNS
   
-
   const checkWinner = () => {
-    rowChecker();
+    const row = rowArr();
+    checker(row);
+    const column = columnArr();
+    checker(column);
   };
 
   makePlay(0, 0);
-  makePlay(1, 0);
   makePlay(0, 1);
+  makePlay(1, 0);
   makePlay(1, 1);
-  makePlay(0, 2);
+  makePlay(2, 0);
   console.table(gameBoard.board);
 })();
 
