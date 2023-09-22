@@ -8,7 +8,8 @@ const PlayerFactory = (name, marker) => {
 const player1 = PlayerFactory("Pobi", "X");
 const player2 = PlayerFactory("Polo", "O");
 
-//BOARD MODULE
+//BOARD MODULE ///
+
 const gameBoard = (() => {
   const createBoard = () => {
     let grid = [];
@@ -27,22 +28,29 @@ const gameBoard = (() => {
   return { board };
 })();
 
-// GAME FLOW MODULE
+// GAME FLOW MODULE ///
+
 const gameFlow = (() => {
   let currentPlayer = player1;
 
+  const switchPlayer = () => {
+    return currentPlayer === player1 ?  player2 :  player1;
+  };
+
+  const getCurrentMarker = () => {
+    return currentPlayer.marker;
+  }
+
   const makePlay = (cellRow, cellColumn, player) => {
-    player = currentPlayer;
     if (gameBoard.board[cellRow][cellColumn] === "") {
+      player = currentPlayer;
       gameBoard.board[cellRow][cellColumn] = player.marker;
-      checkWinner(); //Probably have to move!!!!
-      if (currentPlayer === player1) {
-        currentPlayer = player2;
-      } else currentPlayer = player1;
+      checkWinner();
+      currentPlayer = switchPlayer();
     }
   };
 
-  // WIN CONDITIONS: //
+  // WIN CONDITIONS:
 
   //BY ROWS
   const rowArr = () => {
@@ -91,7 +99,6 @@ const gameFlow = (() => {
     let marker = `${currentPlayer.marker}`;
     let pattern = `${marker}${marker}${marker}`;
     const arrString = arrMarkers;
-    console.log(arrString);
 
     arrMarkers.forEach((string) => {
       if (string === pattern) {
@@ -101,6 +108,7 @@ const gameFlow = (() => {
   };
 
   const checkWinner = () => {
+    console.table(gameBoard.board);
     const row = rowArr();
     checker(row);
     const column = columnArr();
@@ -109,18 +117,20 @@ const gameFlow = (() => {
     checker(diagonal);
   };
 
-  makePlay(0, 0); //X
-  makePlay(0, 2); //O
-  makePlay(2, 2); //X
-  makePlay(2, 1); //O
-  makePlay(1, 1); //X
-  console.table(gameBoard.board);
-
-  return { makePlay };
+  return { makePlay, getCurrentMarker };
 })();
 
-// DISPLAY GAME MODULE
-const display = (() => {
-  const cell = document.querySelectorAll('cell');
+// DISPLAY GAME MODULE ///
 
+const display = (() => {
+  const cells = document.querySelectorAll(".cell");
+  cells.forEach((item) => {
+    const id = item.getAttribute("id");
+    item.addEventListener("click", () => {
+      item.textContent = gameFlow.getCurrentMarker();
+      gameFlow.makePlay(id[0], id[1]);
+    });
+  });
+
+  return {};
 })();
