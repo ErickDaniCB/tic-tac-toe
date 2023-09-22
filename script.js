@@ -65,6 +65,28 @@ const gameFlow = (() => {// GAME FLOW MODULE
     });
     return columnString;
   }
+
+  //BY DIAGONAL 
+  const diagonalArr = () => { 
+    const diagonalString = ['',''];
+    for (let i = 0; i < 3; i++) {
+      switch (i) {
+        case 0:
+          diagonalString[0] += gameBoard.board[i][0];
+          diagonalString[1] += gameBoard.board[i][2];
+        break;
+        case 1:
+          diagonalString[0] += gameBoard.board[i][1];
+          diagonalString[1] += gameBoard.board[i][1];
+        break;
+        case 2:
+          diagonalString[0] += gameBoard.board[i][2];
+          diagonalString[1] += gameBoard.board[i][0];
+        break; 
+      }
+    }
+    return diagonalString;
+  }
   
   const checker = (arrMarkers) => {
     let marker = `${currentPlayer.marker}`;
@@ -84,13 +106,15 @@ const gameFlow = (() => {// GAME FLOW MODULE
     checker(row);
     const column = columnArr();
     checker(column);
+    const diagonal = diagonalArr();
+    checker(diagonal);
   };
 
-  makePlay(0, 0);
-  makePlay(0, 1);
-  makePlay(1, 0);
-  makePlay(1, 1);
-  makePlay(2, 0);
+  makePlay(0, 0);//X
+  makePlay(0, 2);//O
+  makePlay(2, 2);//X
+  makePlay(2, 1);//O
+  makePlay(1, 1);//X
   console.table(gameBoard.board);
 })();
 
