@@ -34,12 +34,12 @@ const gameFlow = (() => {
   let currentPlayer = player1;
 
   const switchPlayer = () => {
-    return currentPlayer === player1 ?  player2 :  player1;
+    return currentPlayer === player1 ? player2 : player1;
   };
 
   const getCurrentMarker = () => {
     return currentPlayer.marker;
-  }
+  };
 
   const makePlay = (cellRow, cellColumn, player) => {
     if (gameBoard.board[cellRow][cellColumn] === "") {
@@ -98,23 +98,31 @@ const gameFlow = (() => {
   const checker = (arrMarkers) => {
     let marker = `${currentPlayer.marker}`;
     let pattern = `${marker}${marker}${marker}`;
-    const arrString = arrMarkers;
-
+    let win = false;
     arrMarkers.forEach((string) => {
       if (string === pattern) {
-        console.log(`${marker} Winner`);
+        win = true;
       }
     });
+    return win;
   };
 
   const checkWinner = () => {
-    console.table(gameBoard.board);
-    const row = rowArr();
-    checker(row);
-    const column = columnArr();
-    checker(column);
-    const diagonal = diagonalArr();
-    checker(diagonal);
+    console.log(currentPlayer.marker);
+    const rowStrings = rowArr();
+    const columnStrings = columnArr();
+    const diagonalStrings = diagonalArr();
+
+    const rowCheck = checker(rowStrings);
+    const columnCheck = checker(columnStrings);
+    const diagonalCheck = checker(diagonalStrings);
+
+    if (rowCheck || columnCheck || diagonalCheck) {
+      console.log("End!");
+      display.cells.forEach((item) => {
+        item.removeEventListener("click", makePlay);
+      });
+    }
   };
 
   return { makePlay, getCurrentMarker };
@@ -126,11 +134,15 @@ const display = (() => {
   const cells = document.querySelectorAll(".cell");
   cells.forEach((item) => {
     const id = item.getAttribute("id");
-    item.addEventListener("click", () => {
-      item.textContent = gameFlow.getCurrentMarker();
-      gameFlow.makePlay(id[0], id[1]);
-    });
+    const makePlay = () => {
+      if (item.textContent === "") {
+        item.textContent = gameFlow.getCurrentMarker();
+        gameFlow.makePlay(id[0], id[1]);
+      }
+    };
+    
+    item.addEventListener("click", makePlay);
   });
 
-  return {};
+  return { cells };
 })();

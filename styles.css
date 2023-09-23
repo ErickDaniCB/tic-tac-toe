@@ -22,10 +22,11 @@ body {
   grid-template-rows: repeat(3, 1fr);
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  background-color: orange;
+  background-color: rgb(255, 165, 0);
 }
 
 .cell {
   font-size: 5rem;
-  background-color: white;
+  /* background-color: white; */
+  color: rgb(40, 43, 232);
 }
