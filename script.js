@@ -22,7 +22,6 @@ const createBoard = () => {
   return grid;
 };
 
-
 // GAME FLOW MODULE ///
 
 const gameFlow = (() => {
@@ -48,9 +47,11 @@ const gameFlow = (() => {
       if (checkWin) {
         console.log(`${currentPlayer.marker} wins!`);
         restart();
+        return true
       } else if (checkFilled) {
         console.log("Draw!");
         restart();
+        return true
       }
       currentPlayer = switchPlayer();
     }
@@ -134,37 +135,44 @@ const gameFlow = (() => {
     board.forEach((arr) => {
       arrTemp = arrTemp.concat(arr);
     });
-    if(arrTemp.includes('')){
+    if (arrTemp.includes("")) {
       return false;
-    } return true;
+    }
+    return true;
   };
-  
-  //RESTART GAME 
-  
-  const restart = () => { 
+
+  //RESTART
+
+  const restart = () => {
     board = createBoard();
-    console.log(board);
-  }
+  };
 
   return { makePlay, getCurrentMarker };
 })();
 
-// DISPLAY GAME MODULE ///
+// GAME UI MODULE ///
 
-const display = (() => {
-
+const UI = (() => {
   const cells = document.querySelectorAll(".cell");
 
-  cells.forEach((item) => {
-    const play = () => {
-    const id = item.getAttribute("id");
-      if (item.textContent === "") {
-        item.textContent = gameFlow.getCurrentMarker();
-        gameFlow.makePlay(id[0], id[1]);
-      }
+  function play() {
+    const id = this.getAttribute("id");
+    if (this.textContent === "") {
+      this.textContent = gameFlow.getCurrentMarker();
+      const finish = gameFlow.makePlay(id[0], id[1]);
+      if(finish) {removeEventListener();} 
     }
+  }
+
+  cells.forEach((item) => {
     item.addEventListener("click", play);
   });
 
-  return {} ;
+  function removeEventListener() {
+    cells.forEach((item) => {
+      item.removeEventListener("click", play);
+    });
+  }
+
+  return {};
 })();
